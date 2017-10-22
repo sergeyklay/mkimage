@@ -6,13 +6,15 @@ Docker images to use in multi-stage builds.
 
 ### PHP 7.0 + Ubunti 16.04
 
+#### Getting Artifacts
+
 ```sh
 docker create --name extract klay/mkimage:ubuntu-16.04-php-7.0
 docker cp extract:/artifacts ./artifacts
 docker rm -f extract
 ```
 
-Dockerfile:
+#### Dockerfile
 
 ```Dockerfile
 COPY artifacts .
@@ -27,7 +29,7 @@ RUN cp -R /artifacts/etc/php/7.0/mods-available /etc/php/7.0/mods-available \
     && rm -rf /artifacts
 ```
 
-## Artifacts
+#### Artifacts
 
 ```
 /artifacts
