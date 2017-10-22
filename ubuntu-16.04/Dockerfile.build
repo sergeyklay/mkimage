@@ -45,34 +45,35 @@ RUN apt-get install -y --no-install-recommends \
 
 RUN mkdir -p $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi` \
 	&& mkdir -p $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available \
-	&& mkdir -p $ARTIFACTS_PATH/usr/local/bin
+	&& mkdir -p $ARTIFACTS_PATH/usr/local/bin \
+	&& mkdir -p $ARTIFACTS_PATH/usr/local/lib
 
 # Zephir Parser
 RUN git clone --depth=1 -q https://github.com/phalcon/php-zephir-parser.git -b master $BUILD_HOME/php-zephir-parser \
 	&& cd $BUILD_HOME/php-zephir-parser \
 	&& ./install --phpize /usr/bin/phpize$PHP_VERSION --php-config /usr/bin/php-config$PHP_VERSION \
 	&& cp `php-config --extension-dir`/zephir_parser.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/zephir_parser.so \
-	&& cp ./tests/ci/zephir_parser.ini $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/zephir_parser.ini
+	&& cp $BUILD_HOME/php-zephir-parser/tests/ci/zephir_parser.ini $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/zephir_parser.ini
 
 # Phalcon
 RUN git clone --depth=1 -q https://github.com/phalcon/cphalcon.git -b master $BUILD_HOME/cphalcon \
 	&& cd $BUILD_HOME/cphalcon/build \
 	&& ./install --phpize /usr/bin/phpize$PHP_VERSION --php-config /usr/bin/php-config$PHP_VERSION \
 	&& cp `php-config --extension-dir`/phalcon.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/phalcon.so \
-	&& cd $BUILD_HOME/cphalcon \
-	&& cp ./tests/_ci/phalcon.ini $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/phalcon.ini
+	&& cp $BUILD_HOME/cphalcon/tests/_ci/phalcon.ini $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/phalcon.ini
 
 # Aerospike
 RUN git clone --depth=1 -q https://github.com/aerospike/aerospike-client-php -b master $BUILD_HOME/aerospike-client-php \
 	&& cd $BUILD_HOME/aerospike-client-php/src \
+	&& chmod +x build.sh \
 	&& ./build.sh --loglevel OFF \
-	&& make -j"$(getconf _NPROCESSORS_ONLN)" install \
-	&& cp `php-config --extension-dir`/aerospike.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/aerospike.so \
-	&& echo "[Aerospike]" | tee $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini &> /dev/null \
-	&& echo "; Note: To use aerospike extension you have to install libssl-dev package" | tee -a $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini &> /dev/null \
-	&& echo "extension=aerospike.so" | tee -a $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini &> /dev/null \
-	&& echo "aerospike.udf.lua_system_path=/usr/local/aerospike/lua" | tee -a $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini &> /dev/null \
-	&& echo "aerospike.udf.lua_user_path=/usr/local/aerospike/usr-lua" | tee -a $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini &> /dev/null
+	&& make install \
+	&& cp $BUILD_HOME/aerospike-client-php/src/modules/aerospike.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/aerospike.so \
+	&& echo "[Aerospike]" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini \
+	&& echo "; Note: To use aerospike extension you have to install libssl-dev package" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini \
+	&& echo "extension=aerospike.so" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini \
+	&& echo "aerospike.udf.lua_system_path=/usr/local/aerospike/lua" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini \
+	&& echo "aerospike.udf.lua_user_path=/usr/local/aerospike/usr-lua" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/aerospike.ini
 
 RUN tree -a $ARTIFACTS_PATH
 
