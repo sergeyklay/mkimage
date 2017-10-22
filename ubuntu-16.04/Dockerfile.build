@@ -85,6 +85,16 @@ RUN git clone --depth=1 -q https://github.com/tony2001/php-ext-handlersocketi.gi
 	&& cp $BUILD_HOME/php-ext-handlersocketi/modules/handlersocketi.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/handlersocketi.so \
 	&& echo "extension=handlersocketi.so" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/handlersocketi.ini
 
+# Pinba
+RUN git clone --depth=1 -q https://github.com/tony2001/pinba_extension.git $BUILD_HOME/pinba_extension \
+	&& cd $BUILD_HOME/pinba_extension \
+	&& phpize \
+	&& ./configure \
+	&& make -j"$(getconf _NPROCESSORS_ONLN)" \
+	&& make install \
+	&& cp $BUILD_HOME/pinba_extension/modules/pinba.so $ARTIFACTS_PATH/usr/lib/php/`php-config --phpapi`/pinba.so \
+	&& echo "extension=pinba.so" >> $ARTIFACTS_PATH/etc/php/$PHP_VERSION/mods-available/pinba.ini
+
 RUN tree -a $ARTIFACTS_PATH
 
 VOLUME [$ARTIFACTS_PATH, $BUILD_HOME]
