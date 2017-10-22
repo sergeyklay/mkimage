@@ -49,7 +49,7 @@ push: do-push post-push
 
 .PHONY: do-push
 do-push:
-	docker push $(FQIN)
+	docker push $(IMAGE_NAME):$(IMAGE_BASE_TAG)-php-$(PHP_VERSION)
 
 .PHONY: post-push
 post-push:
