@@ -107,3 +107,10 @@ RUN cp -R /artifacts/etc/php/$PHP_VERSION/mods-available /etc/php/$PHP_VERSION/m
 # Use PHP_VERSION=7.0 or PHP_VERSION=7.1
 make build PHP_VERSION=7.0
 ```
+
+## Verify build-image
+
+```sh
+# Use PHP_VERSION=7.0 or PHP_VERSION=7.1
+docker inspect klay/mkimage:ubuntu-16.04-php-${PHP_VERSION} | grep build_id
+```

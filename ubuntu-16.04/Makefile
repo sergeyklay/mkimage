@@ -27,7 +27,6 @@ post-build: clean
 
 .PHONY: check
 check:
-
 ifeq ($(PHP_VERSION),)
 	$(error The PHP_VERSION variable not defined: $(PHP_VERSION))
 endif
@@ -36,6 +35,7 @@ endif
 docker-build:
 	docker build \
 		-t $(IMAGE_NAME):$(IMAGE_BASE_TAG)-php-$(PHP_VERSION) \
+		--label build_id=$(BUILD_ID) \
 		--pull \
 		--build-arg PHP_VERSION=$(PHP_VERSION) \
 		. \
