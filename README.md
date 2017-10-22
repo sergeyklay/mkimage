@@ -16,6 +16,15 @@ Dockerfile:
 
 ```Dockerfile
 COPY artifacts .
+
+RUN cp -R /artifacts/etc/php/7.0/mods-available /etc/php/7.0/mods-available \
+    && cp -R /artifacts/usr/lib/php/`php-config --phpapi` /usr/lib/php/`php-config --phpapi` \
+    && FILES=/artifacts/etc/php/7.0/mods-available/* && for f in $FILES; \
+        do \
+            phpenmod -v 7.0 -s ALL `basename $f | cut -d '.' -f 1`; \
+        done \
+    && php -m \
+    && rm -rf /artifacts
 ```
 
 ## Artifacts
