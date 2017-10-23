@@ -6,6 +6,9 @@ Avaliable PHP versions:
 
 * PHP 7.0
 * PHP 7.1
+* PHP 7.2
+
+Note: Phalcon support for PHP 7.2 is experemental. Do not use it at production.
 
 ## Usage
 
@@ -14,7 +17,7 @@ Avaliable PHP versions:
 #### Getting Artifacts
 
 ```sh
-# Use PHP_VERSION=7.0 or PHP_VERSION=7.1
+# Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 docker create --name extract klay/mkimage:ubuntu-16.04-php-${PHP_VERSION}
 docker cp extract:/artifacts ./artifacts
 docker rm -f extract
@@ -101,16 +104,45 @@ RUN cp -R /artifacts/etc/php/$PHP_VERSION/mods-available /etc/php/$PHP_VERSION/m
         `-- lib
 ```
 
+##### PHP 7.2
+
+```
+/artifacts
+|-- etc
+|   `-- php
+|       `-- 7.2
+|           `-- mods-available
+|               |-- aerospike.ini
+|               |-- handlersocketi.ini
+|               |-- phalcon.ini
+|               |-- pinba.ini
+|               |-- weakref.ini
+|               `-- zephir_parser.ini
+`-- usr
+    |-- lib
+    |   `-- php
+    |       `-- 20170718
+    |           |-- aerospike.so
+    |           |-- handlersocketi.so
+    |           |-- phalcon.so
+    |           |-- pinba.so
+    |           |-- weakref.so
+    |           `-- zephir_parser.so
+    `-- local
+        |-- bin
+        `-- lib
+```
+
 ## Build your own build-image
 
 ```sh
-# Use PHP_VERSION=7.0 or PHP_VERSION=7.1
+# Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 make build PHP_VERSION=7.0
 ```
 
 ## Verify build-image
 
 ```sh
-# Use PHP_VERSION=7.0 or PHP_VERSION=7.1
+# Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 docker inspect klay/mkimage:ubuntu-16.04-php-${PHP_VERSION} | grep build_id
 ```
