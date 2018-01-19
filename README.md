@@ -8,15 +8,13 @@ Avaliable PHP versions:
 * PHP 7.1
 * PHP 7.2
 
-Note: Phalcon support for PHP 7.2 is experemental. Do not use it at production.
-
 ## Usage
 
 ### Ubunti 16.04
 
 #### Getting Artifacts
 
-```sh
+```bash
 # Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 docker create --name extract klay/mkimage:ubuntu-16.04-php-${PHP_VERSION}
 docker cp extract:/artifacts ./artifacts
@@ -135,14 +133,15 @@ RUN cp -R /artifacts/etc/php/$PHP_VERSION/mods-available /etc/php/$PHP_VERSION/m
 
 ## Build your own build-image
 
-```sh
+```bash
+cd ubuntu-16.04
 # Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 make build PHP_VERSION=7.0
 ```
 
 ## Verify build-image
 
-```sh
+```bash
 # Use PHP_VERSION=7.0, PHP_VERSION=7.1 or PHP_VERSION=7.2
 docker inspect klay/mkimage:ubuntu-16.04-php-${PHP_VERSION} | grep build_id
 ```
