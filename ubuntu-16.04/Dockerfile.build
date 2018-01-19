@@ -9,8 +9,12 @@ ENV ARTIFACTS_PATH="/artifacts" \
 RUN mkdir -p $ARTIFACTS_PATH $BUILD_HOME
 WORKDIR $BUILD_HOME
 
-RUN apt-get update -y \
-	&& apt-get install -y --no-install-recommends \
+RUN echo exit 101 > /usr/sbin/policy-rc.d \
+	&& chmod +x /usr/sbin/policy-rc.d \
+	&& echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup \
+    && apt-get update -y \
+	&& apt-get upgrade -y -q \
+	&& apt-get install -y -q --no-install-recommends \
 		software-properties-common \
 		python-software-properties \
 		software-properties-common \

@@ -1,10 +1,7 @@
-SRCDIR         = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-SHELL          = /bin/bash
+SHELL         ?= /bin/sh
 ARGS           = $(filter-out $@,$(MAKECMDGOALS))
-
-PHP_VERSION    ?= 7.0
-BUILD_ID       ?= $(shell /bin/date "+%Y%m%d-%H%M%S")
-
+PHP_VERSION   ?= 7.0
+BUILD_ID      ?= $(shell /bin/date "+%Y%m%d-%H%M%S")
 IMAGE_NAME     = klay/mkimage
 IMAGE_BASE_TAG = ubuntu-16.04
 
